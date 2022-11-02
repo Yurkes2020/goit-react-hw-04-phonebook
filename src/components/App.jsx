@@ -17,7 +17,7 @@ export class App extends Component {
   };
 
   formSubmitHandler = ({ name, number }) => {
-    const isExist = this.state.contacts.find(contact => contact.name);
+    const isExist = this.state.contacts.find(contact => contact.name === name);
     if (isExist) {
       return alert(`${name} is already in contacts.`);
     }
@@ -46,6 +46,20 @@ export class App extends Component {
       contacts: prevState.contacts.filter(contact => contact.id !== idContact),
     }));
   };
+
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parsContacts = JSON.parse(contacts);
+    if (parsContacts) {
+      this.setState({ contacts: parsContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
 
   render() {
     return (
