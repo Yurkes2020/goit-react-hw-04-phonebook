@@ -4,9 +4,10 @@ import { ContactForm } from './ContactForm/ContactForm ';
 import { ContactList } from './ContactList/ContactList';
 import { Filter } from './Filter/Filter';
 import { Title, Conteiner } from './App.styled';
+import { useLocalStorage } from 'hooks/useLocalStorage';
 
 export const App = () => {
-  const [contacts, setContacts] = useState([
+  const [contacts, setContacts] = useLocalStorage('contacts', [
     { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
     { id: 'id-2', name: 'Hermione Kline', number: '443-89-12' },
     { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
@@ -14,17 +15,15 @@ export const App = () => {
   ]);
   const [filter, setFilter] = useState('');
 
-  const formSubmitHandler = data => {
-    const contact = {
-      id: nanoid(),
-      name: data.name,
-      number: data.number,
-    };
-    // const isExist = contacts.find(contact => contact.name === name);
-    // if (isExist) {
-    //   return alert(`${name} is already in contacts.`);
-    // }
-    setContacts(prevState => [...prevState, contact]);
+  const formSubmitHandler = (name, number) => {
+    return contacts.find(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    )
+      ? alert(`${name} is already in contacts.`)
+      : setContacts(prevState => [
+          { id: nanoid(7), name, number },
+          ...prevState,
+        ]);
   };
 
   const handleChangeFilter = event => {
@@ -41,20 +40,6 @@ export const App = () => {
   const deleteContact = idContact => {
     setContacts(contacts.filter(contact => contact.id !== idContact));
   };
-
-  // componentDidMount() {
-  //   const contacts = localStorage.getItem('contacts');
-  //   const parsContacts = JSON.parse(contacts);
-  //   if (parsContacts) {
-  //     this.setState({ contacts: parsContacts });
-  //   }
-  // }
-
-  // componentDidUpdate(prevProps, prevState) {
-  //   if (this.state.contacts !== prevState.contacts) {
-  //     localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
-  //   }
-  // }
 
   return (
     <Conteiner>

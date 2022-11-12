@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Form, FormLabel } from './ContactForm.styled';
 
 export const ContactForm = ({ onFormSubmit }) => {
@@ -22,8 +22,7 @@ export const ContactForm = ({ onFormSubmit }) => {
 
   const handleSubmit = event => {
     event.preventDefault();
-    const data = { name, number };
-    onFormSubmit(data);
+    onFormSubmit(name, number);
     reset();
   };
 
@@ -33,8 +32,8 @@ export const ContactForm = ({ onFormSubmit }) => {
   };
 
   return (
-    <Form>
-      <FormLabel onSubmit={handleSubmit}>
+    <Form onSubmit={handleSubmit}>
+      <FormLabel>
         Name
         <input
           onChange={handleChange}
